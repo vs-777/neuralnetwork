@@ -66,7 +66,7 @@ class Network:
                 self.backprop()
                 self.update()
 
-            print("epoch {} complete".format(e))
+            print("epoch {} complete".format(e+1))
             
         np.save('weights.npy',self.weights)
         np.save('biases.npy',self.biases)
