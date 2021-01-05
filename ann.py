@@ -1,8 +1,7 @@
 import numpy as np
-import idx2numpy
 
 class Network:
-
+    
     def __init__(self, shape, imgs, labels, lr):
 
         self.shape = shape
@@ -51,7 +50,7 @@ class Network:
             self.dcdw.insert(0,np.dot(self.layers[-i-2], np.transpose(dadz*dcda)))
             self.dcdb.insert(0,dadz*dcda)
             dcda = np.dot(np.transpose(self.weights[-i-1]), dadz*dcda)
-            dadz = self.layers[-i-2]#np.copy(self.layers[-i-2])
+            dadz = self.layers[-i-2]
             dadz[dadz>0] = 1
 
     def update(self):
@@ -64,19 +63,17 @@ class Network:
 
         for e in range(epoch):
             for i in range(self.imgs.shape[0]):
-                #for image in range(1):#self.imagesarray.shape[0]):
+
                 self.feedforward(i)
                 self.backprop()
                 self.update()
-                #print("batch {} complete".format(i))
-            print("epoch {} complete".format(e))
 
-        
+            print("epoch {} complete".format(e))
+            
         np.save('weights.npy',self.weights)
         np.save('biases.npy',self.biases)
 
         print("training complete")
-
 
     def test(self, imgs_test, labels_test, weights = None, biases = None):
         
@@ -97,38 +94,3 @@ class Network:
         
         success = results.count(1)/len(results)*100
         print(str(success) + '% \accuracy')
-
-    def quicktest(self):
-        for i in range(20):
-            sample_rand = np.random.randint(50000)
-            self.feedforward(sample_rand)
-            print(self.labels[self.sample])
-            print(np.argmax(self.layers[-1]))
-            print('')
-
-
-
-imagesfile, labelsfile = 'data/fashion/train-images-idx3-ubyte', 'data/fashion/train-labels-idx1-ubyte'
-images = idx2numpy.convert_from_file(imagesfile)/255
-labels = idx2numpy.convert_from_file(labelsfile)
-
-imagesfile_test, labelsfile_test = 'data/fashion/t10k-images-idx3-ubyte', 'data/fashion/t10k-labels-idx1-ubyte'
-images_test = idx2numpy.convert_from_file(imagesfile_test)/255
-labels_test = idx2numpy.convert_from_file(labelsfile_test)
-
-shape = [64,64,10]
-
-# weights = np.load('200_80_x4_w.npy', allow_pickle=True)
-# biases = np.load('200_80_x4_b.npy', allow_pickle=True)
-
-# shape = [weights[i].shape[0] for i in range(len(weights))]
-
-
-network = Network(shape, images, labels, 0.001)
-network.train(3)
-network.test(images_test, labels_test)#, weights, biases)
-
-
-
-
-
