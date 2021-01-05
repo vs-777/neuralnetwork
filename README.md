@@ -2,7 +2,4 @@
 
 Simple feedforward modular neural network made with NumPy. 
 
-
-Hidden layers - ReLU activation
-
-Output layer - Softmax activation
+Uses ReLU activation for hidden layers and softmax for the output. 
